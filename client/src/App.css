@@ -1,0 +1,61 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.App {
+  width: 600px;
+}
+
+.note {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  width: 80%;
+  height: fit-content;
+}
+
+.note li {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  width: 90%;
+  height: 150px;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #111;
+  padding: 10px;
+  transition: 0.5s all;
+}
+.note li:hover {
+  background-color: #ddd;
+  transition: 0.4s all;
+}
+
+form {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.note li button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 10px;
+}
+.note li button:hover {
+  background-color: red;
+  color: #fff;
+  transition: 0.35s all;
+}
+
+.note li a {
+  text-decoration: none;
+  color: inherit;
+}
