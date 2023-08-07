@@ -1,20 +1,22 @@
-import React, { useState } from "react";
-// import { createCard } from "../api/createCard";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { TDeck } from "./Home";
 // import { Link } from "react-router-dom";
 // import { TDeck } from "./Home";
 
-const Deck = () => {
+const Deck: React.FC = () => {
   const { noteId } = useParams();
+
   console.log(noteId);
 
   const [text, setText] = useState("");
-  //   const [note, setNote] = useState<TDeck[]>([]);
+  const [notes, setNotes] = useState<string[]>([]);
+  const [noteDeck, setNoteDeck] = useState<TDeck>();
 
   const handleCreateNote = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await fetch(`http://localhost:5000/notes/${noteId}/note`, {
+    const note = await fetch(`http://localhost:5000/notes/${noteId}/note`, {
       method: "POST",
       body: JSON.stringify({
         text,
@@ -24,37 +26,56 @@ const Deck = () => {
       },
     });
 
+    const createdNote = await note.json();
+    console.log(createdNote);
+
+    setNoteDeck(createdNote);
     setText("");
   };
 
-  //   const handleDeleteNote = async (noteId: string) => {
-  //     await fetch(`http://localhost:5000/notes/${noteId}`, {
-  //       method: "DELETE",
-  //     });
-  //     setNote(note.filter((item) => item._id !== noteId));
-  //   };
+  const handleDeleteNote = async (index: number) => {
+    if (!noteId) return;
+    const newNotes = await fetch(
+      `http://localhost:5000/notes/${noteId}/note/${index}`,
+      {
+        method: "DELETE",
+      }
+    );
 
-  //   const getNotes = async () => {
-  //     const response = await fetch("http://localhost:5000/notes");
-  //     const newNotes = await response.json();
-  //     setNote(newNotes);
-  //   };
+    const deletedNote = await newNotes.json();
+    console.log(deletedNote);
 
-  //   useEffect(() => {
-  //     getNotes();
-  //   }, []);
+    console.log(deletedNote.notes);
+
+    console.log(deletedNote.notes[index]);
+    setNotes(deletedNote.notes);
+    console.log(index);
+  };
+
+  const getNotes = async (noteId: string) => {
+    const response = await fetch(`http://localhost:5000/notes/${noteId}`);
+    const newNotes = await response.json();
+
+    setNotes(newNotes.notes);
+  };
+
+  useEffect(() => {
+    if (!noteId) return;
+    getNotes(noteId);
+  }, [noteDeck, noteId]);
   return (
     <div className="App">
-      {/* <ul className="note">
-        {note.map((item) => {
+      <ul className="note">
+        {notes.map((item, index) => {
           return (
-            <li key={item._id}>
-              <button onClick={() => handleDeleteNote(item._id)}>X</button>
-              <Link to={`/notes/${item._id}`}>{item.title}</Link>
+            <li key={index}>
+              <button onClick={() => handleDeleteNote(index)}>X</button>
+
+              {item}
             </li>
           );
         })}
-      </ul> */}
+      </ul>
       <form onSubmit={handleCreateNote}>
         <label htmlFor="note">Create Note</label>
         <input

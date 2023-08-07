@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 require("dotenv").config();
 import cors from "cors";
 import NotesModel from "./models/Note";
-import { createCardForDeckController } from "../controller/createNoteForDeckController";
 
 const app = express();
 
@@ -43,8 +42,33 @@ app.post("/notes/:noteId/note", async (req: Request, res: Response) => {
   if (!note) return res.status(400).send("no note exist");
   note.notes.push(text);
   await note.save();
+  console.log(note);
+
   res.json(note);
 });
+
+app.get("/notes/:noteId", async (req: Request, res: Response) => {
+  const noteId = req.params.noteId;
+  // console.log(noteId);
+
+  const response = await NotesModel.findById(noteId);
+  res.json(response);
+});
+
+app.delete(
+  "/notes/:noteId/note/:index",
+  async (req: Request, res: Response) => {
+    const noteId = req.params.noteId;
+    const index = req.params.index;
+
+    const note = await NotesModel.findById(noteId);
+    if (!note) return res.status(400).send("Note does not exists!");
+    note.notes.splice(parseInt(index), 1);
+    await note.save();
+    res.json(note);
+    console.log(note.notes[parseInt(index)], [parseInt(index)]);
+  }
+);
 
 mongoose.connect(process.env.MONGO_URL!).then(() => {
   app.listen(5000, () => {
