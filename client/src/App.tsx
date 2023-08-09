@@ -5,7 +5,7 @@ import Deck from "./pages/Deck";
 // import Note from "./pages/Note";
 
 // export const BASE_URL = `http://localhost:5000`
-export const BASE_URL = `http://localhost:5000`;
+export const BASE_URL = `https://note-deck-backend.onrender.com`;
 
 function App() {
   return (
