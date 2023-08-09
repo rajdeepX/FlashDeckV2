@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { BASE_URL } from "../App";
 
 export type TDeck = {
   title: string;
@@ -13,7 +14,7 @@ const Home = () => {
 
   const handleCreateNote = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/notes", {
+    const response = await fetch(`${BASE_URL}/notes`, {
       method: "POST",
       body: JSON.stringify({
         title,
@@ -28,14 +29,14 @@ const Home = () => {
   };
 
   const handleDeleteNote = async (noteId: string) => {
-    await fetch(`http://localhost:5000/notes/${noteId}`, {
+    await fetch(`${BASE_URL}/notes/${noteId}`, {
       method: "DELETE",
     });
     setNote(note.filter((item) => item._id !== noteId));
   };
 
   const getNotes = async () => {
-    const response = await fetch("http://localhost:5000/notes");
+    const response = await fetch(`${BASE_URL}/notes`);
     const newNotes = await response.json();
     setNote(newNotes);
   };

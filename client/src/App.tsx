@@ -4,6 +4,9 @@ import Home from "./pages/Home";
 import Deck from "./pages/Deck";
 // import Note from "./pages/Note";
 
+// export const BASE_URL = `http://localhost:5000`
+export const BASE_URL = `http://localhost:5000`;
+
 function App() {
   return (
     <>

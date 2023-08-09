@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TDeck } from "./Home";
+import { BASE_URL } from "../App";
 // import { Link } from "react-router-dom";
 // import { TDeck } from "./Home";
 
 const Deck: React.FC = () => {
   const { noteId } = useParams();
-
-  console.log(noteId);
 
   const [text, setText] = useState("");
   const [notes, setNotes] = useState<string[]>([]);
@@ -16,7 +15,7 @@ const Deck: React.FC = () => {
   const handleCreateNote = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const note = await fetch(`http://localhost:5000/notes/${noteId}/note`, {
+    const note = await fetch(`${BASE_URL}/notes/${noteId}/note`, {
       method: "POST",
       body: JSON.stringify({
         text,
@@ -27,7 +26,6 @@ const Deck: React.FC = () => {
     });
 
     const createdNote = await note.json();
-    console.log(createdNote);
 
     setNoteDeck(createdNote);
     setText("");
@@ -35,25 +33,17 @@ const Deck: React.FC = () => {
 
   const handleDeleteNote = async (index: number) => {
     if (!noteId) return;
-    const newNotes = await fetch(
-      `http://localhost:5000/notes/${noteId}/note/${index}`,
-      {
-        method: "DELETE",
-      }
-    );
+    const newNotes = await fetch(`${BASE_URL}/notes/${noteId}/note/${index}`, {
+      method: "DELETE",
+    });
 
     const deletedNote = await newNotes.json();
-    console.log(deletedNote);
 
-    console.log(deletedNote.notes);
-
-    console.log(deletedNote.notes[index]);
     setNotes(deletedNote.notes);
-    console.log(index);
   };
 
   const getNotes = async (noteId: string) => {
-    const response = await fetch(`http://localhost:5000/notes/${noteId}`);
+    const response = await fetch(`${BASE_URL}/notes/${noteId}`);
     const newNotes = await response.json();
 
     setNotes(newNotes.notes);
