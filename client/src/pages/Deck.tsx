@@ -11,6 +11,7 @@ const Deck: React.FC = () => {
   const [text, setText] = useState("");
   const [notes, setNotes] = useState<string[]>([]);
   const [noteDeck, setNoteDeck] = useState<TDeck>();
+  const [title, setTitle] = useState("");
 
   const handleCreateNote = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,8 +44,15 @@ const Deck: React.FC = () => {
   };
 
   const getNotes = async (noteId: string) => {
+    const res = await fetch(`${BASE_URL}/notes`);
     const response = await fetch(`${BASE_URL}/notes/${noteId}`);
     const newNotes = await response.json();
+    const ress = await res.json();
+    const data = ress.find((item: { _id: string }) => {
+      return item._id === noteId;
+    });
+    const title = data.title;
+    setTitle(title);
 
     setNotes(newNotes.notes);
   };
@@ -54,32 +62,37 @@ const Deck: React.FC = () => {
     getNotes(noteId);
   }, [noteDeck, noteId]);
   return (
-    <div className="App">
-      <ul className="note">
-        {notes.map((item, index) => {
-          return (
-            <li key={index}>
-              <button onClick={() => handleDeleteNote(index)}>X</button>
+    <>
+      <header>
+        <h2>{title}</h2>
+      </header>
+      <div className="App">
+        <form onSubmit={handleCreateNote}>
+          <label htmlFor="note">Create Note</label>
+          <input
+            type="text"
+            value={text}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setText(e.target.value);
+            }}
+            required
+          />
 
-              {item}
-            </li>
-          );
-        })}
-      </ul>
-      <form onSubmit={handleCreateNote}>
-        <label htmlFor="note">Create Note</label>
-        <input
-          type="text"
-          value={text}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setText(e.target.value);
-          }}
-          required
-        />
+          <button>Create</button>
+        </form>
+        <ul className="note">
+          {notes.map((item, index) => {
+            return (
+              <li key={index}>
+                <button onClick={() => handleDeleteNote(index)}>X</button>
 
-        <button>Create</button>
-      </form>
-    </div>
+                {item}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </>
   );
 };
 

@@ -46,31 +46,41 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="App">
-      <ul className="note">
-        {note.map((item) => {
-          return (
-            <li key={item._id}>
-              <button onClick={() => handleDeleteNote(item._id)}>X</button>
-              <Link to={`/notes/${item._id}`}>{item.title}</Link>
-            </li>
-          );
-        })}
-      </ul>
-      <form onSubmit={handleCreateNote}>
-        <label htmlFor="note">Create Note</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setTitle(e.target.value);
-          }}
-          required
-        />
+    <>
+      <header>
+        <h1>
+          NoteDeck<span>V2</span>
+        </h1>
+        <p>
+          A simple step towards keeping your notes <span>organized</span>.
+        </p>
+      </header>
+      <div className="App">
+        <form onSubmit={handleCreateNote}>
+          <label htmlFor="note">Create Deck</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setTitle(e.target.value);
+            }}
+            required
+          />
 
-        <button>Create</button>
-      </form>
-    </div>
+          <button>Create</button>
+        </form>
+        <ul className="note">
+          {note.map((item) => {
+            return (
+              <li key={item._id}>
+                <button onClick={() => handleDeleteNote(item._id)}>X</button>
+                <Link to={`/notes/${item._id}`}>{item.title}</Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </>
   );
 };
 

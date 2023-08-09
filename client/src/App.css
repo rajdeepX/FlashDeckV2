@@ -59,3 +59,32 @@ form {
   text-decoration: none;
   color: inherit;
 }
+
+header h2 {
+  text-transform: capitalize;
+}
+header h1 span {
+  color: #646cff;
+}
+
+header h1 {
+  margin-bottom: 0;
+}
+header p {
+  margin-bottom: 50px;
+  font-size: 18px;
+}
+
+header p span {
+  border-bottom: 2px solid #646cff;
+}
+
+@media (max-width: 500px) {
+  .note {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 20px auto;
+    width: 50%;
+  }
+}
