@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TDeck } from "./Home";
 import { BASE_URL } from "../App";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import CardSkeleton from "../CardSkeleton";
 // import { Link } from "react-router-dom";
 // import { TDeck } from "./Home";
 
@@ -12,6 +15,7 @@ const Deck: React.FC = () => {
   const [notes, setNotes] = useState<string[]>([]);
   const [noteDeck, setNoteDeck] = useState<TDeck>();
   const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const handleCreateNote = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +57,7 @@ const Deck: React.FC = () => {
     });
     const title = data.title;
     setTitle(title);
+    setLoading(false);
 
     setNotes(newNotes.notes);
   };
@@ -64,7 +69,7 @@ const Deck: React.FC = () => {
   return (
     <>
       <header>
-        <h2>{title}</h2>
+        <h2>{loading ? <Skeleton className="skeleton-title" /> : title}</h2>
       </header>
       <div className="App">
         <form onSubmit={handleCreateNote}>
@@ -81,6 +86,7 @@ const Deck: React.FC = () => {
           <button>Create</button>
         </form>
         <ul className="note">
+          {loading && <CardSkeleton />}
           {notes.map((item, index) => {
             return (
               <li key={index}>

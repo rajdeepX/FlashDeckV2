@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../App";
+import CardSkeleton from "../CardSkeleton";
 
 export type TDeck = {
   title: string;
@@ -11,6 +12,7 @@ export type TDeck = {
 const Home = () => {
   const [title, setTitle] = useState("");
   const [note, setNote] = useState<TDeck[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const handleCreateNote = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +41,7 @@ const Home = () => {
     const response = await fetch(`${BASE_URL}/notes`);
     const newNotes = await response.json();
     setNote(newNotes);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -69,7 +72,10 @@ const Home = () => {
 
           <button>Create</button>
         </form>
+
         <ul className="note">
+          {loading && <CardSkeleton />}
+
           {note.map((item) => {
             return (
               <li key={item._id}>
