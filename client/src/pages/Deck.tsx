@@ -85,6 +85,7 @@ const Deck: React.FC = () => {
 
           <button>Create</button>
         </form>
+
         <ul className="note">
           {loading && <CardSkeleton />}
           {notes.map((item, index) => {
